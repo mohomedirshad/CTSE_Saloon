@@ -33,7 +33,7 @@ class OurServices extends StatelessWidget {
             },
           ),
           RecomendPlantCard(
-            image: "assets/images/haircut.jpg",
+            image: "assets/images/beard.jpg",
             title: "BEARD",
             country: "GENTS",
             price: 200,
@@ -47,14 +47,14 @@ class OurServices extends StatelessWidget {
             },
           ),
           RecomendPlantCard(
-            image: "assets/images/haircut.jpg",
+            image: "assets/images/makeup.jpg",
             title: "MAKE UP",
             country: "LADIES & GENTS",
             price: 1500,
             press: () {},
           ),
           RecomendPlantCard(
-            image: "assets/images/haircut.jpg",
+            image: "assets/images/bridal.jpg",
             title: "BRIDAL DRESSING",
             country: "WEDDINGS",
             price: 10000,

@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:salon_app/components/my_bottom_nav_bar.dart';
 import 'package:salon_app/screens/details/components/header.dart';
@@ -10,39 +11,12 @@ class MakeAppointment extends StatefulWidget {
 class _FormTestState extends State<MakeAppointment> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  var nameController = new TextEditingController();
+  var addressController = new TextEditingController();
+  var ageController = new TextEditingController();
+
+  final databaseRef = FirebaseDatabase.instance.reference();
   String _name;
-
-  Widget _buildNameField() {
-    return TextFormField(
-        maxLength: 20,
-        decoration: InputDecoration(hintText: 'Name'),
-        maxLines: 1,
-        validator: (text) {
-          if (text.isEmpty) {
-            return 'Name cannot be empty';
-          }
-          return null;
-        },
-        onSaved: (text) {
-          _name = text;
-        });
-  }
-
-  Widget _buildPhoneField() {
-    return TextFormField(
-        maxLength: 20,
-        decoration: InputDecoration(hintText: 'Name'),
-        maxLines: 1,
-        validator: (text) {
-          if (text.isEmpty) {
-            return 'Name cannot be empty';
-          }
-          return null;
-        },
-        onSaved: (text) {
-          _name = text;
-        });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,8 +36,52 @@ class _FormTestState extends State<MakeAppointment> {
                 margin: const EdgeInsets.all(24.0),
                 child: Column(
                   children: <Widget>[
-                    _buildNameField(),
-                    _buildPhoneField(),
+                    Text(
+                      "Book Now",
+                      style: TextStyle(fontSize: 28),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    TextFormField(
+                      controller: nameController,
+                      decoration: InputDecoration(
+                          labelText: 'Name', border: OutlineInputBorder()),
+                      validator: (text) {
+                        if (text.isEmpty) {
+                          return 'Name cannot be empty';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      controller: addressController,
+                      decoration: InputDecoration(
+                          labelText: 'Address', border: OutlineInputBorder()),
+                      validator: (text) {
+                        if (text.isEmpty) {
+                          return 'Address cannot be empty';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      controller: ageController,
+                      decoration: InputDecoration(
+                          labelText: 'Age', border: OutlineInputBorder()),
+                      validator: (text) {
+                        if (text.isEmpty) {
+                          return 'Age cannot be empty';
+                        }
+                        return null;
+                      },
+                    ),
                     SizedBox(
                       height: 100,
                     ),
@@ -88,4 +106,9 @@ class _FormTestState extends State<MakeAppointment> {
       bottomNavigationBar: MyBottomNavBar(),
     );
   }
+}
+
+void insertData(String name, String address, String age) {
+  var databaseRef;
+  databaseRef.child("path").set({});
 }
