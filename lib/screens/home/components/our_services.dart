@@ -1,70 +1,66 @@
 import 'package:flutter/material.dart';
-import 'package:salon_app/screens/IndividualServices/hair.dart';
-import 'package:salon_app/screens/details/details_screen.dart';
-
+import 'package:salon_app/dbContext/database.dart';
 import '../../../constants.dart';
 
-class OurServices extends StatelessWidget {
+class OurServices extends StatefulWidget {
   const OurServices({
-    Key key,
+    Key key, this.title,
   }) : super(key: key);
+
+
+  final String title;
+
+  @override
+  _ViewServicesPageState createState() => _ViewServicesPageState();
+  
+}
+
+
+class _ViewServicesPageState extends State<OurServices>{
+  Database db;
+  
+  List docs = [];
+
+  initialise(){
+    db = Database();
+    db.initialise();
+    db.read().then((value) => {
+      setState((){
+        docs = value;
+      })
+    });
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    initialise();
+  }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: <Widget>[
-          RecomendPlantCard(
-            image: "assets/images/haircut.jpg",
-            title: "HAIR",
-            country: "Ladies & Gents",
-            price: 500,
-            press: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Hair(
-                    size: size,
-                  ),
-                ),
-              );
-            },
-          ),
-          RecomendPlantCard(
-            image: "assets/images/beard.jpg",
-            title: "BEARD",
-            country: "GENTS",
-            price: 200,
-            press: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetailsScreen(),
-                ),
-              );
-            },
-          ),
-          RecomendPlantCard(
-            image: "assets/images/makeup.jpg",
-            title: "MAKE UP",
-            country: "LADIES & GENTS",
-            price: 1500,
-            press: () {},
-          ),
-          RecomendPlantCard(
-            image: "assets/images/bridal.jpg",
-            title: "BRIDAL DRESSING",
-            country: "WEDDINGS",
-            price: 10000,
-            press: () {},
-          ),
-        ],
+    
+    return Scaffold(
+      backgroundColor: Color.fromRGBO(56, 75, 49, 1.0),
+      appBar: AppBar(
+        title: Text(widget.title),
       ),
+      body: ListView.builder(
+        itemBuilder:(BuildContext context, int index){
+          return Card(
+            margin: EdgeInsets.all(10),
+            child: ListTile(
+              contentPadding: EdgeInsets.only(right: 30, left: 36),
+              title: Text(docs[index]["name"]),
+              trailing: Text(docs[index]["price"]),
+            ),
+          );
+        }
+        ),
     );
   }
 }
+
 
 class RecomendPlantCard extends StatelessWidget {
   const RecomendPlantCard({
