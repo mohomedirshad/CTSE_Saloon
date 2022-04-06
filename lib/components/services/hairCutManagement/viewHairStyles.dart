@@ -17,7 +17,7 @@ class _ViewHairStyleScreen extends State<ViewHairStyleScreen> {
 
   final Stream<QuerySnapshot> _userStream = FirebaseFirestore.instance.collection("haircutstyles").snapshots();
 
-  Database db;
+  Database db = new Database();
   List docs = [];
   initialise(){
     db = Database();
@@ -89,7 +89,7 @@ class _ViewHairStyleScreen extends State<ViewHairStyleScreen> {
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder:  (_) => 
                     // EditHairCutScreen(docid: snapshot.data.docs[index])
-                    ViewHairCutScreen(docid: snapshot.data.docs[index]),
+                    ViewHairCutScreen(docid: snapshot.data!.docs[index]),
                     ));
                   },
                   child: Column(

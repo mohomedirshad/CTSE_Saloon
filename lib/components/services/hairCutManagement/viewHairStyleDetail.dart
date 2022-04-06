@@ -10,7 +10,7 @@ import '../../../main.dart';
 
 class ViewHairCutScreen extends StatefulWidget {
   DocumentSnapshot docid;
-  ViewHairCutScreen({this.docid});
+  ViewHairCutScreen({required this.docid});
 
   @override
   _ViewHairCutScreen createState() => _ViewHairCutScreen();
@@ -18,7 +18,7 @@ class ViewHairCutScreen extends StatefulWidget {
 
 class _ViewHairCutScreen extends State<ViewHairCutScreen> {
 
-  Database db;
+  Database db = new Database();
   initialise(){
     db = Database();
     db.initialise();

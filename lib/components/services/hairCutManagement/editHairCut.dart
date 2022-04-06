@@ -16,7 +16,7 @@ class EditHairCutScreen extends StatefulWidget {
 
 class _EditHairCutScreen extends State<EditHairCutScreen> {
 
-  Database db;
+  Database db = new Database();
   initialise() async {
     db = Database();
     db.initialise();

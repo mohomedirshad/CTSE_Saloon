@@ -1,5 +1,10 @@
 // import 'package:file_picker/file_picker.dart';
-// import 'package:firebase_storage/firebase_storage.dart';
+
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:salon_app/components/services/hairCutManagement/viewHairStyles.dart';
 import 'package:salon_app/dbContext/database.dart';
@@ -13,11 +18,15 @@ class AddHairCutScreen extends StatefulWidget {
 }
 
 class _AddHairCutScreen extends State<AddHairCutScreen> {
-  Database db;
+  Database db = new Database();
   initialise(){
     db = Database();
     db.initialise();
   }
+
+  File? _image;
+  String fileName = '';
+  final imagePicker = ImagePicker();
 
   // FirebaseStorage storage = FirebaseStorage.instance;
 
@@ -83,52 +92,47 @@ class _AddHairCutScreen extends State<AddHairCutScreen> {
             // ),
 
 
-            //upload button
+            //upload and upload button        (working)                
 
             // Center(
-            //   child: ElevatedButton(
+            //   child: (_image == null)? 
+            //   ElevatedButton(
             //     onPressed: () async {
-            //       final results = await FilePicker.platform.pickFiles(
-            //         allowMultiple: false,
-            //         type: FileType.custom,
-            //         allowedExtensions: ['png', 'jpg']
-            //       );
-
-            //       if (results == null) {
-            //         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("No files selected."),
-            //         ),);
-            //         return null;
-            //       }
-
-            //       final path = results.files.single.path;
-            //       final fileName = results.files.single.name;
-
-            //       print(path);
-            //       print(fileName);  
-
-            //       storage.uploadFile(path, fileName).then((value) => print("Done"));
-            //     },
-            //    child: Text("Upload"), 
-            //   ),
+            //       final pick = await imagePicker.pickImage(source: ImageSource.gallery);
+                                                        
+            //       setState(() {
+            //         if (pick != null) {
+            //           _image = File(pick.path);
+            //           var path = pick.path;
+            //           var _fileName = path.split('/').last;
+            //           print(_fileName);                  
+            //           fileName = _fileName;
+            //         }else{
+            //           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("No files selected."),duration: Duration(milliseconds: 400),));
+            //         }
+            //       });                  
+            //     }, child: Text("Choose Image") ,                                            
+            //   ): ElevatedButton(
+            //     onPressed: () async {                  
+            //       final pick = await imagePicker.pickImage(source: ImageSource.gallery);
+            //       setState(() {
+            //         if (pick != null) {
+            //           _image = File(pick.path);
+            //           var path = pick.path;
+            //           var _fileName = path.split('/').last;
+            //           print(_fileName);                  
+            //           fileName = _fileName;
+            //         }else{
+            //           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("No files selected."),duration: Duration(milliseconds: 400),));
+            //         }
+            //       });                                    
+            //     } ,
+            //    child: Text("$fileName"),              
+            //   ) ,
             // ),
 
-            // Container(              
-            //   margin: EdgeInsets.only(bottom: 33,left: 7, right: 7,top: 3),              
-            //   decoration: BoxDecoration(
-            //     border: Border.symmetric(horizontal: BorderSide.none, vertical: BorderSide.none),                
-            //     borderRadius: BorderRadius.circular(10),                
-            //   ),              
-            //   child: TextField(
-            //     controller: haircutName,                
-            //     decoration: InputDecoration(
-            //       hintText: "Add Haircut Name...",                  
-            //     ),
-            //     textAlign: TextAlign.center,
-            //     style: TextStyle(
-            //       color: Colors.white,
-            //     )
-            //   ),
-            // ),
+
+
             Container(              
               margin: EdgeInsets.only(bottom: 33,left: 7, right: 7,top: 3),              
               decoration: BoxDecoration(
@@ -189,7 +193,8 @@ class _AddHairCutScreen extends State<AddHairCutScreen> {
               ),
               onPressed: (){            
                 if(haircutName.text.isEmpty) {
-                  return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  return setState(() {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     duration: Duration(
                       seconds: 1
                     ),
@@ -202,9 +207,11 @@ class _AddHairCutScreen extends State<AddHairCutScreen> {
                     ),
                     backgroundColor: Colors.red,                
                   ));
+                  });
                 } 
                 if(haircutPrice.text.isEmpty){
-                  return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  return setState(() {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     duration: Duration(
                       seconds: 1
                     ),
@@ -216,10 +223,12 @@ class _AddHairCutScreen extends State<AddHairCutScreen> {
                       ),
                       ),
                     backgroundColor: Colors.red,
-                  ));              
+                  ));
+                  });              
                 }
                 if(haircutDescription.text.isEmpty){
-                  return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  return setState(() {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     duration: Duration(
                       seconds: 1
                     ),
@@ -231,10 +240,11 @@ class _AddHairCutScreen extends State<AddHairCutScreen> {
                       ),
                       ),
                     backgroundColor: Colors.red,
-                  ));              
+                  )); 
+                  });             
                 } 
                 // create hair style          
-                db.create(haircutName.text, haircutPrice.text, haircutDescription.text)
+                db.create(haircutName.text, haircutPrice.text, haircutDescription.text, _image)
                 .whenComplete(() => {
                   
                   // toaster
@@ -264,6 +274,10 @@ class _AddHairCutScreen extends State<AddHairCutScreen> {
       ),            
       )
     );   
+
   }
+    pr(File? file){
+      print(file);
+    }
   
 }
