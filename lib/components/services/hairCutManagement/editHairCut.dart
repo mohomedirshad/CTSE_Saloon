@@ -1,12 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:salon_app/components/services/hairCutManagement/viewHairStyles.dart';
 import 'package:salon_app/dbContext/database.dart';
 
-import '../../../main.dart';
 
+// ignore: must_be_immutable
 class EditHairCutScreen extends StatefulWidget {
-  DocumentSnapshot docid;
-  EditHairCutScreen({this.docid});
+  // DocumentSnapshot docid;
+
+  String id, name,price, description;
+  EditHairCutScreen(this.id, this.name, this.price, this.description);
 
   @override
   _EditHairCutScreen createState() => _EditHairCutScreen();
@@ -15,19 +17,17 @@ class EditHairCutScreen extends StatefulWidget {
 class _EditHairCutScreen extends State<EditHairCutScreen> {
 
   Database db;
-  initialise(){
+  initialise() async {
     db = Database();
     db.initialise();
   }
 
   @override
   void initState() {
-    id = TextEditingController(text: widget.docid.id);
-    print(id);
-    haircutName = TextEditingController(text: widget.docid.get('name'));
-    haircutDescription = TextEditingController(text: widget.docid.get('description'));
-    haircutPrice = TextEditingController(text: widget.docid.get('price'));
-    // haircutTimeStamp = TextEditingController(text: widget.docid.get('timestamp'));
+    id = TextEditingController(text: widget.id);   
+    haircutName = TextEditingController(text: widget.name);   
+    haircutPrice = TextEditingController(text: widget.price);   
+    haircutDescription = TextEditingController(text: widget.description);    
     super.initState();
     initialise();
   }
@@ -37,80 +37,151 @@ class _EditHairCutScreen extends State<EditHairCutScreen> {
   TextEditingController haircutName = new TextEditingController();
   TextEditingController haircutDescription = new TextEditingController();
   TextEditingController haircutPrice = new TextEditingController();
-  // TextEditingController haircutTimeStamp = new TextEditingController();
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(actions: [
-        MaterialButton(onPressed: (){
-          
-          db.update(id.text, haircutName.text, haircutPrice.text, haircutDescription.text)
-          // widget.docid.reference.update({
-          //   "name": haircutName.text,
-          //   // "content": content.tex,
-          // })
-          .whenComplete(() => {
-            Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (_)=>HomeScreen()
-            ))
-        });
-        },
-        child: Text("Save"),
-        ),
-        MaterialButton(onPressed: (){
-          widget.docid.reference.delete().whenComplete(() => {
-            Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (_)=>HomeScreen()
-            ))
-        });
-        },
-        child: Text("Delete Haircut"),
-        ),
-      ],
+      appBar: AppBar(
+        title: new Text(
+          "Update Haircut",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,            
+          ),
+        ),         
       ),
-      body: Container(
-        child: Column(
+      body: SingleChildScrollView(
+        child: Card(
+        margin: EdgeInsets.all(20),        
+        color: Colors.blue,        
+        shape: RoundedRectangleBorder(          
+          borderRadius: BorderRadius.circular(20),          
+        ),
+        shadowColor: Colors.grey,
+        child:Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
           children: [            
             Container(
-              decoration: BoxDecoration(border: Border.all()),
+              margin: EdgeInsets.only(bottom: 33,left: 7, right: 7,top: 3),              
+              decoration: BoxDecoration(
+                border: Border.symmetric(horizontal: BorderSide.none, vertical: BorderSide.none),                
+                borderRadius: BorderRadius.circular(10),                
+              ),              
               child: TextField(
                 controller: haircutName,
-                decoration: InputDecoration(hintText: "haircut name"),
+                decoration: InputDecoration(hintText: "Haircut Name"),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                ),
               ),
             ),
             Container(
-              decoration: BoxDecoration(border: Border.all()),
-              child: TextField(
+              margin: EdgeInsets.only(bottom: 33,left: 7, right: 7,top: 3),              
+              decoration: BoxDecoration(
+                border: Border.symmetric(horizontal: BorderSide.none, vertical: BorderSide.none),                
+                borderRadius: BorderRadius.circular(10),                
+              ),
+              child: TextField(                
                 controller: haircutPrice,
-                decoration: InputDecoration(hintText: "haircut price"),
+                decoration: InputDecoration(hintText: "Haircut Price"),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                ),
               ),
             ),
             Container(
-              decoration: BoxDecoration(border: Border.all()),
+              margin: EdgeInsets.only(bottom: 33,left: 7, right: 7,top: 3),              
+              decoration: BoxDecoration(
+                border: Border.symmetric(horizontal: BorderSide.none, vertical: BorderSide.none),                
+                borderRadius: BorderRadius.circular(10),                
+              ),
               child: TextField(
                 controller: haircutDescription,
-                decoration: InputDecoration(hintText: "haircut description"),
+                decoration: InputDecoration(hintText: "Haircut Description"),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                )
               ),
             ),
+            MaterialButton(onPressed: (){
+              print(id.text);
+              print(haircutName.text);
+              db.update(id.text, haircutName.text, haircutPrice.text, haircutDescription.text)          
+              .whenComplete(() => {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    duration: Duration(
+                      seconds: 1
+                    ),
+                    content: Text(
+                      "Updated successfully!",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white
+                      ),
+                      ),
+                    backgroundColor: Colors.green,
+                  )),
+
+                Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (_)=>ViewHairStyleScreen()
+                ))
+            });
+            },
+            child: Container(
+              color: Colors.deepPurple,
+              margin: EdgeInsets.all(10),
+              padding: const EdgeInsets.only(top: 18,bottom: 18,left: 15,right: 15), 
+              child: Text(
+              "Update",
+              style: TextStyle(
+                color: Colors.white,
+              )),
+            )),
+                   
+            MaterialButton(onPressed: (){                   
+              db.delete(id.text).whenComplete(() => {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    duration: Duration(
+                      seconds: 1
+                    ),
+                    content: Text(
+                      "Deleted successfully!",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white
+                      ),
+                      ),
+                    backgroundColor: Colors.green,
+                  )),              
+                  Navigator.pushReplacement(
+                    context, MaterialPageRoute(builder: (_)=> ViewHairStyleScreen()
+                )),
+            });
+            },
+            child: Container(
+              color: Colors.deepPurple,
+              margin: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(20.0), 
+              child: Text(
+              "Delete Haircut",
+              style: TextStyle(
+                color: Colors.white,
+              )),
+            )),             
             SizedBox(
               height: 10,
             ),
-            // Expanded(
-            //   child:Container(
-            //   decoration: BoxDecoration(border: Border.all()),
-            //   child: TextField(
-            //     controller: service,
-            //     expands: true,
-            //     maxLines: null,
-            //     decoration: InputDecoration(hintText: "content"),
-            //   ),
-            // ), 
-            //   )
           ],
         ),
+        ),
       ),
+      )
     );
   }
 }

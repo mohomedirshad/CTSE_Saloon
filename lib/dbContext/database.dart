@@ -12,6 +12,7 @@ class Database {
   }
 
   //-- view all 
+  // ignore: missing_return
   Future<List> read() async {
     QuerySnapshot querySnapshot;
 
@@ -53,6 +54,15 @@ class Database {
       await fireStore.collection("haircutstyles").doc(id).update({'name': name, 'price': price, 'description': description, 'timestamp': FieldValue.serverTimestamp()});
     } catch (e)
     {
+      print(e);
+    }
+  }
+
+  //Delete
+  Future<void> delete(String id) async {
+    try {
+      await fireStore.collection("haircutstyles").doc(id).delete();      
+    } catch (e) {
       print(e);
     }
   }

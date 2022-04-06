@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:salon_app/components/services/hairCutManagement/addHairCut.dart';
-import 'package:salon_app/components/services/hairCutManagement/editHairCut.dart';
+import 'package:salon_app/components/services/hairCutManagement/viewHairStyleDetail.dart';
 import 'package:salon_app/dbContext/database.dart';
 import 'package:salon_app/main.dart';
 
@@ -26,9 +26,11 @@ class _ViewHairStyleScreen extends State<ViewHairStyleScreen> {
       if (value.isEmpty) {
         value.length = 0
       },
-      setState((){
+      if (mounted) {
+        setState((){
         docs = value;
-      })
+      })  
+      }      
     });
   }
 
@@ -59,7 +61,7 @@ class _ViewHairStyleScreen extends State<ViewHairStyleScreen> {
             context, MaterialPageRoute(builder: (_)=> HomeScreen(),
             ),
           )},
-      ),
+        ),
         centerTitle: true,
       ),      
       body: StreamBuilder(
@@ -85,7 +87,9 @@ class _ViewHairStyleScreen extends State<ViewHairStyleScreen> {
               itemBuilder: (_,index){
                 return GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder:  (_) => EditHairCutScreen(docid: snapshot.data.docs[index]),
+                    Navigator.push(context, MaterialPageRoute(builder:  (_) => 
+                    // EditHairCutScreen(docid: snapshot.data.docs[index])
+                    ViewHairCutScreen(docid: snapshot.data.docs[index]),
                     ));
                   },
                   child: Column(
