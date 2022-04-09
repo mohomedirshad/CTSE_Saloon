@@ -1,12 +1,13 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:salon_app/components/services/hairCutManagement/viewHairStyles.dart';
 import 'package:salon_app/dbContext/database.dart';
 
-
 // ignore: must_be_immutable
 class EditHairCutScreen extends StatefulWidget {
-  String id, name,price, description;
-  EditHairCutScreen(this.id, this.name, this.price, this.description);
+  String id, name,price, description, image;
+  EditHairCutScreen(this.id, this.name, this.price, this.description, this.image);
 
   @override
   _EditHairCutScreen createState() => _EditHairCutScreen();
@@ -20,22 +21,28 @@ class _EditHairCutScreen extends State<EditHairCutScreen> {
     db.initialise();
   }
 
+  File? _image;
+  String fileName = '';
+  final imagePicker = ImagePicker();
+
   @override
   void initState() {
     id = TextEditingController(text: widget.id);   
     haircutName = TextEditingController(text: widget.name);   
     haircutPrice = TextEditingController(text: widget.price);   
     haircutDescription = TextEditingController(text: widget.description);    
+    haircutImage = TextEditingController(text: widget.image);
+    fileName = haircutImage.text;    
+
     super.initState();
     initialise();
   }
-
    
   TextEditingController id = new TextEditingController();
   TextEditingController haircutName = new TextEditingController();
   TextEditingController haircutDescription = new TextEditingController();
   TextEditingController haircutPrice = new TextEditingController();
-
+  TextEditingController haircutImage = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -61,13 +68,51 @@ class _EditHairCutScreen extends State<EditHairCutScreen> {
         child:Padding(
           padding: EdgeInsets.all(20),
           child: Column(
-          children: [            
+          children: [
+            Center(
+              child: (_image == null)? 
+              ElevatedButton(
+                onPressed: () async {
+                  final pick = await imagePicker.pickImage(source: ImageSource.gallery);
+                                                        
+                  setState(() {
+                    if (pick != null) {
+                      _image = File(pick.path);
+                      var path = pick.path;
+                      var _fileName = path.split('/').last;
+                      print(_fileName);                  
+                      fileName = _fileName;
+                    }else{
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("No files selected."),duration: Duration(milliseconds: 400),));
+                    }
+                  });                  
+                }, child: Text("Choose Image") ,                                            
+              ): ElevatedButton(
+                onPressed: () async {
+                  final pick = await imagePicker.pickImage(source: ImageSource.gallery);
+                                                        
+                  setState(() {
+                    if (pick != null) {
+                      _image = File(pick.path);
+                      var path = pick.path;
+                      var _fileName = path.split('/').last;
+                      print(_fileName);                  
+                      fileName = _fileName;
+                    }else{
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("No files selected."),duration: Duration(milliseconds: 400),));
+                    }
+                  });                  
+                }, child: Text(fileName) ,                                            
+              ),              
+            ),
+
             Container(
-              margin: EdgeInsets.only(bottom: 33,left: 7, right: 7,top: 3),              
+              margin: EdgeInsets.only(bottom: 33,left: 7, right: 7,top: 10),              
               decoration: BoxDecoration(
                 border: Border.symmetric(horizontal: BorderSide.none, vertical: BorderSide.none),                
                 borderRadius: BorderRadius.circular(10),                
-              ),              
+              ),
+                            
               child: TextField(
                 controller: haircutName,
                 decoration: InputDecoration(hintText: "Haircut Name"),
@@ -110,7 +155,12 @@ class _EditHairCutScreen extends State<EditHairCutScreen> {
             MaterialButton(onPressed: (){
               print(id.text);
               print(haircutName.text);
-              db.update(id.text, haircutName.text, haircutPrice.text, haircutDescription.text)          
+
+              //upload image
+              db.upload(_image, fileName);
+
+              //update collection
+              db.update(id.text, haircutName.text, haircutPrice.text, haircutDescription.text,fileName)
               .whenComplete(() => {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     duration: Duration(
@@ -142,7 +192,8 @@ class _EditHairCutScreen extends State<EditHairCutScreen> {
               )),
             )),
                    
-            MaterialButton(onPressed: (){                   
+            MaterialButton(onPressed: (){ 
+              db.deleteImage(_image, fileName);
               db.delete(id.text).whenComplete(() => {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     duration: Duration(

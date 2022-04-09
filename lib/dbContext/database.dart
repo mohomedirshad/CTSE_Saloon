@@ -1,11 +1,6 @@
-
-
-import 'dart:ffi';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 
 class Database {
   FirebaseFirestore? fireStore;
@@ -37,27 +32,24 @@ class Database {
   }
 
   //-- create 
-  Future<void> create(String name, String price, String description, File? _image) async {
+  Future<void> create(String name, String price, String description, String image) async {
     try {
       await fireStore!.collection("haircutstyles").add({
         'name' : name,
         'price' : price,
         'description' : description,
+        'image':  image,
         'timestamp' : FieldValue.serverTimestamp()
       });
-
-      //image upload
-      await upload(_image);
-      
     } catch (e) {
       print(e);
     }
   }
 
   //-- update 
-  Future<void> update(String id, String name, String price, String description) async{
+  Future<void> update(String id, String name, String price, String description, String imageName) async{
     try {
-      await fireStore!.collection("haircutstyles").doc(id).update({'name': name, 'price': price, 'description': description, 'timestamp': FieldValue.serverTimestamp()});
+      await fireStore!.collection("haircutstyles").doc(id).update({'name': name, 'price': price, 'description': description, 'image': imageName, 'timestamp': FieldValue.serverTimestamp()});
     } catch (e)
     {
       print(e);
@@ -73,13 +65,29 @@ class Database {
     }
   }
 
-  // image upload
-  Future upload(File? _image) async {
+  //delete image from firebase storage
+  Future deleteImage(File? _image, String fileName) async {
     try {
-      Reference ref = FirebaseStorage.instance.ref().child("hairstyles");
+      Reference ref = FirebaseStorage.instance.ref().child("hairstyles").child(fileName);
+      await ref.delete();      
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // image upload
+  Future upload(File? _image, String fileName) async {
+    try {
+      Reference ref = FirebaseStorage.instance.ref().child("hairstyles").child(fileName);
       await ref.putFile(_image!);      
     } catch (e) {
       print(e);
     }
+  }
+
+  // get image url to view image
+  Future<String> downloadImageUrl(String fileName) async {
+    String downloadUrl = await FirebaseStorage.instance.ref('hairstyles/$fileName').getDownloadURL();
+    return downloadUrl;
   }
 }

@@ -1,10 +1,5 @@
-// import 'package:file_picker/file_picker.dart';
-
 import 'dart:io';
-
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:salon_app/components/services/hairCutManagement/viewHairStyles.dart';
 import 'package:salon_app/dbContext/database.dart';
@@ -12,8 +7,7 @@ import 'package:salon_app/dbContext/database.dart';
 
 class AddHairCutScreen extends StatefulWidget {
   @override
-  _AddHairCutScreen createState() => _AddHairCutScreen();
-    
+  _AddHairCutScreen createState() => _AddHairCutScreen();   
 }
 
 class _AddHairCutScreen extends State<AddHairCutScreen> {
@@ -23,6 +17,7 @@ class _AddHairCutScreen extends State<AddHairCutScreen> {
     db.initialise();
   }
 
+  //image properties
   File? _image;
   String fileName = '';
   final imagePicker = ImagePicker();
@@ -71,65 +66,45 @@ class _AddHairCutScreen extends State<AddHairCutScreen> {
           padding: EdgeInsets.all(20),
           child: Column(
           children: [
-            // MaterialButton(
-            //   child: Container(
-            //   color: Colors.deepOrangeAccent,
-            //   padding: const EdgeInsets.all(20.0), 
-            //   child: Text(
-            //   "Upload Image",
-            //   style: TextStyle(
-            //     color: Colors.white,
-            //   )),
-            //   ),
-            //   onPressed: (){
-            //     ()=> _upload('gallery');                
-            //   }
-            // ),
 
-
-            //upload and upload button        (working)                
-
-            // Center(
-            //   child: (_image == null)? 
-            //   ElevatedButton(
-            //     onPressed: () async {
-            //       final pick = await imagePicker.pickImage(source: ImageSource.gallery);
-                                                        
-            //       setState(() {
-            //         if (pick != null) {
-            //           _image = File(pick.path);
-            //           var path = pick.path;
-            //           var _fileName = path.split('/').last;
-            //           print(_fileName);                  
-            //           fileName = _fileName;
-            //         }else{
-            //           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("No files selected."),duration: Duration(milliseconds: 400),));
-            //         }
-            //       });                  
-            //     }, child: Text("Choose Image") ,                                            
-            //   ): ElevatedButton(
-            //     onPressed: () async {                  
-            //       final pick = await imagePicker.pickImage(source: ImageSource.gallery);
-            //       setState(() {
-            //         if (pick != null) {
-            //           _image = File(pick.path);
-            //           var path = pick.path;
-            //           var _fileName = path.split('/').last;
-            //           print(_fileName);                  
-            //           fileName = _fileName;
-            //         }else{
-            //           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("No files selected."),duration: Duration(milliseconds: 400),));
-            //         }
-            //       });                                    
-            //     } ,
-            //    child: Text("$fileName"),              
-            //   ) ,
-            // ),
-
-
+            //upload and upload button
+            Center(
+              child: (_image == null)? 
+              ElevatedButton(
+                onPressed: () async {
+                  final pick = await imagePicker.pickImage(source: ImageSource.gallery);                                                        
+                  setState(() {
+                    if (pick != null) {
+                      _image = File(pick.path);
+                      var path = pick.path;
+                      var _fileName = path.split('/').last;
+                      print(_fileName);                  
+                      fileName = _fileName;
+                    }else{
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("No files selected."),duration: Duration(milliseconds: 400),));
+                    }
+                  });                  
+                }, child: Text("Choose Image") ,                                            
+              ): ElevatedButton(
+                onPressed: () async {
+                  final pick = await imagePicker.pickImage(source: ImageSource.gallery);                                                       
+                  setState(() {
+                    if (pick != null) {
+                      _image = File(pick.path);
+                      var path = pick.path;
+                      var _fileName = path.split('/').last;
+                      print(_fileName);                  
+                      fileName = _fileName;
+                    }else{
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("No files selected."),duration: Duration(milliseconds: 400),));
+                    }
+                  });                  
+                }, child: Text(fileName) ,                                            
+              ),              
+            ),
 
             Container(              
-              margin: EdgeInsets.only(bottom: 33,left: 7, right: 7,top: 3),              
+              margin: EdgeInsets.only(bottom: 33,left: 7, right: 7,top: 10),              
               decoration: BoxDecoration(
                 border: Border.symmetric(horizontal: BorderSide.none, vertical: BorderSide.none),                
                 borderRadius: BorderRadius.circular(10),                
@@ -163,8 +138,7 @@ class _AddHairCutScreen extends State<AddHairCutScreen> {
             Container(
               margin: EdgeInsets.only(bottom: 33,left: 7, right: 7,top: 3),
               decoration: BoxDecoration(
-                border: Border.symmetric(horizontal: BorderSide.none, vertical: BorderSide.none),
-                // color: Color.fromRGBO(211, 211, 211, 5.0),
+                border: Border.symmetric(horizontal: BorderSide.none, vertical: BorderSide.none),                
                 borderRadius: BorderRadius.circular(10),
               ),
               child: TextField(
@@ -238,8 +212,12 @@ class _AddHairCutScreen extends State<AddHairCutScreen> {
                   )); 
                   });             
                 } 
+
+                //image upload                
+                db.upload(_image, fileName);
+
                 // create hair style          
-                db.create(haircutName.text, haircutPrice.text, haircutDescription.text, _image)
+                db.create(haircutName.text, haircutPrice.text, haircutDescription.text, fileName)
                 .whenComplete(() => {
                   
                   // toaster
@@ -256,6 +234,7 @@ class _AddHairCutScreen extends State<AddHairCutScreen> {
                       ),
                     backgroundColor: Colors.green,
                   )),
+
                   // screen navigation
                   Navigator.pushReplacement(
                   context, MaterialPageRoute(

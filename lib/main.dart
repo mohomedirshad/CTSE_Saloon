@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:salon_app/components/services/hairCutManagement/viewHairStyles.dart';
 import 'package:salon_app/constants.dart';
 import 'package:salon_app/components/my_bottom_nav_bar.dart';

@@ -4,11 +4,9 @@ import 'package:salon_app/components/services/hairCutManagement/addHairCut.dart'
 import 'package:salon_app/components/services/hairCutManagement/viewHairStyleDetail.dart';
 import 'package:salon_app/dbContext/database.dart';
 import 'package:salon_app/main.dart';
-
 import '../../my_bottom_nav_bar.dart';
 
 class ViewHairStyleScreen extends StatefulWidget {
-
   @override      
     _ViewHairStyleScreen createState() => _ViewHairStyleScreen();  
 }
@@ -82,7 +80,8 @@ class _ViewHairStyleScreen extends State<ViewHairStyleScreen> {
               borderRadius: BorderRadius.circular(12),
               
             ),
-            child: ListView.builder(              
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,              
               itemCount: docs.length,
               itemBuilder: (_,index){
                 return GestureDetector(
@@ -102,19 +101,7 @@ class _ViewHairStyleScreen extends State<ViewHairStyleScreen> {
                       ),
                       child: ListTile(
                         tileColor: Colors.blue,
-
-                        //- Image
-                        // leading: ConstrainedBox(
-                        //   constraints: BoxConstraints(
-                        //     maxHeight: 44,
-                        //     maxWidth: 44,
-                        //     minHeight: 64,
-                        //     minWidth: 64,
-                        //   ),
-                        //   child: Image.asset('./assets/images/haircut.jpg', fit: BoxFit.cover),
-                        // ),
-                        shape: RoundedRectangleBorder(
-                          
+                        shape: RoundedRectangleBorder(                          
                           borderRadius: BorderRadius.circular(10),
                           side: BorderSide(
                             color: Colors.white,
@@ -130,7 +117,6 @@ class _ViewHairStyleScreen extends State<ViewHairStyleScreen> {
                           ),
                           textAlign: TextAlign.left,
                         ),
-
                         contentPadding: EdgeInsets.symmetric(
                           vertical: 12,
                           horizontal: 16
@@ -142,62 +128,7 @@ class _ViewHairStyleScreen extends State<ViewHairStyleScreen> {
                 );
               }
               ),
-          );
-
-          // return Container(
-          //   decoration: BoxDecoration(
-          //     color: Colors.blue,              
-          //     borderRadius: BorderRadius.circular(12),
-              
-          //   ),
-          //   height: 10,
-          //   child: ListView.builder(              
-          //     itemCount: docs.length,
-          //     itemBuilder: (_,index){
-          //       return GestureDetector(
-          //         onTap: (){
-          //           Navigator.push(context, MaterialPageRoute(builder:  (_) => EditHairCutScreen(docid: snapshot.data.docs[index]),
-          //           ));
-          //         },
-          //         child: Column(
-          //           children: [
-          //             SizedBox(
-          //               height: 4,
-          //             ),
-          //             Padding(padding: EdgeInsets.only(
-          //               left: 3,
-          //               right: 3
-          //             ),
-          //             child: ListTile(
-          //               shape: RoundedRectangleBorder(
-          //                 borderRadius: BorderRadius.circular(10),
-          //                 side: BorderSide(
-          //                   color: Colors.black,
-          //                   width: 2,
-          //                 ),
-                          
-          //               ),
-          //               title: Text(
-          //                 docs[index]['name'],
-          //                 style: TextStyle(
-          //                   fontSize: 20,
-                            
-          //                 ),
-          //                 textAlign: TextAlign.center,
-          //               ),
-
-          //               contentPadding: EdgeInsets.symmetric(
-          //                 vertical: 12,
-          //                 horizontal: 16
-          //               ),
-          //             ),
-          //             )
-          //           ],
-          //         ),
-          //       );
-          //     }
-          //     ),
-          // );
+          );          
         },
       ),
       bottomNavigationBar: MyBottomNavBar(),

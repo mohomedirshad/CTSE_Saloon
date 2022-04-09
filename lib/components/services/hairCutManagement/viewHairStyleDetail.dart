@@ -1,12 +1,8 @@
-import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:salon_app/components/services/hairCutManagement/editHairCut.dart';
 import 'package:salon_app/components/services/hairCutManagement/viewHairStyles.dart';
 import 'package:salon_app/dbContext/database.dart';
-
-import '../../../main.dart';
 
 // ignore: must_be_immutable
 class ViewHairCutScreen extends StatefulWidget {
@@ -18,7 +14,6 @@ class ViewHairCutScreen extends StatefulWidget {
 }
 
 class _ViewHairCutScreen extends State<ViewHairCutScreen> {
-
   Database db = new Database();
   initialise(){
     db = Database();
@@ -32,6 +27,7 @@ class _ViewHairCutScreen extends State<ViewHairCutScreen> {
     haircutDescription = TextEditingController(text: widget.docid.get('description'));
     print(haircutDescription.text);
     haircutPrice = TextEditingController(text: widget.docid.get('price'));
+    haircutImage = TextEditingController(text: widget.docid.get('image'));
     super.initState();
     initialise();
   }
@@ -40,6 +36,7 @@ class _ViewHairCutScreen extends State<ViewHairCutScreen> {
   TextEditingController haircutName = new TextEditingController();
   TextEditingController haircutDescription = new TextEditingController();
   TextEditingController haircutPrice = new TextEditingController();  
+  TextEditingController haircutImage = new TextEditingController();  
 
   @override
   Widget build(BuildContext context) {
@@ -73,20 +70,33 @@ class _ViewHairCutScreen extends State<ViewHairCutScreen> {
               Padding(
               padding: EdgeInsets.only(top: 10, bottom: 5),
             ),
-            Column(              
-              children: [
-                Container(                  
-                height: 200,
-                child: Image.asset(
-                'assets/images/haircut.jpg',
-                width: 400,
-                height: 200,                            
-                fit: BoxFit.fitHeight,                
-                ),                
-                margin: EdgeInsets.only(top: 30, bottom: 30),
-                ),
-              ],              
-            ),            
+            FutureBuilder(
+              future: db.downloadImageUrl(haircutImage.text),
+              builder: (BuildContext context, AsyncSnapshot<String>snapshot) {
+                if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {                  
+                  return Column(              
+                    children: [
+                      Container(                  
+                      height: 200,
+                      child: Image.network(
+                        snapshot.data!,                  
+                        width: 400,
+                        height: 200,                            
+                        fit: BoxFit.fitHeight,
+                      ),
+                      margin: EdgeInsets.only(top: 30, bottom: 30),
+                      ),
+                    ],              
+                  );   
+                }
+                if (snapshot.connectionState == ConnectionState.waiting || !snapshot.hasData) {
+                  return CircularProgressIndicator();                 
+                }
+                return Container();
+              },
+            ),
+
+                     
             Text(
               "Haircut Name: "+ haircutName.text,
               textAlign: TextAlign.left,
@@ -123,7 +133,7 @@ class _ViewHairCutScreen extends State<ViewHairCutScreen> {
             MaterialButton(
               onPressed: (){      
               Navigator.pushReplacement( 
-                context, MaterialPageRoute(builder: (_)=> EditHairCutScreen(id.text, haircutName.text, haircutPrice.text, haircutDescription.text)
+                context, MaterialPageRoute(builder: (_)=> EditHairCutScreen(id.text, haircutName.text, haircutPrice.text, haircutDescription.text, haircutImage.text)
                 ));
               },
               color: Colors.purple,
@@ -138,24 +148,8 @@ class _ViewHairCutScreen extends State<ViewHairCutScreen> {
               height: 20,
             ),
             ],            
-          ),    
-               
-        ),                    
-        
-            
-        // Expanded(
-        //   child:Container(
-        //   decoration: BoxDecoration(border: Border.all()),
-        //   child: TextField(
-        //     controller: service,
-        //     expands: true,
-        //     maxLines: null,
-        //     decoration: InputDecoration(hintText: "content"),
-        //   ),
-        // ), 
-        //   )
-          
-        
+          ),                   
+        ),                            
       ),
     );
   }
