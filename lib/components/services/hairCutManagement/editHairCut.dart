@@ -5,8 +5,6 @@ import 'package:salon_app/dbContext/database.dart';
 
 // ignore: must_be_immutable
 class EditHairCutScreen extends StatefulWidget {
-  // DocumentSnapshot docid;
-
   String id, name,price, description;
   EditHairCutScreen(this.id, this.name, this.price, this.description);
 

@@ -95,52 +95,7 @@ class _HomeScreen extends State<HomeScreen> {
                   ],
                 ),
               ),                  
-              ),
-              // GestureDetector(
-              //     onTap: (){print("Nail Coloring");},
-              //     child: Container(
-              //   decoration: BoxDecoration(
-              //     borderRadius: BorderRadius.circular(20),
-              //     color: Colors.purple
-              //   ),
-              //   child: Column(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: [
-              //       Text(
-              //         "Nail Coloring",
-              //         textAlign: TextAlign.center,
-              //         style: TextStyle(
-              //           color: Colors.white,
-              //           fontSize: 27
-              //         ),                      
-              //       )
-              //     ],
-              //   ),
-              // ),                  
-              // ),
-              
-              // GestureDetector(
-              //     onTap: (){print("Facial");},
-              //     child: Container(
-              //   decoration: BoxDecoration(
-              //     borderRadius: BorderRadius.circular(20),
-              //     color: Colors.blue
-              //   ),
-              //   child: Column(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: [
-              //       Text(
-              //         "Facial",
-              //         textAlign: TextAlign.center,
-              //         style: TextStyle(
-              //           color: Colors.white,
-              //           fontSize: 27
-              //         ),                      
-              //       )
-              //     ],
-              //   ),
-              // ),                  
-              // ),
+              ),              
             ],
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,

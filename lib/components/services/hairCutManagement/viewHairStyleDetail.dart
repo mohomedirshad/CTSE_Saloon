@@ -8,6 +8,7 @@ import 'package:salon_app/dbContext/database.dart';
 
 import '../../../main.dart';
 
+// ignore: must_be_immutable
 class ViewHairCutScreen extends StatefulWidget {
   DocumentSnapshot docid;
   ViewHairCutScreen({required this.docid});

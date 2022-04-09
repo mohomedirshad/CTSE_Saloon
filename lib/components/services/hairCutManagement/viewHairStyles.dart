@@ -87,8 +87,7 @@ class _ViewHairStyleScreen extends State<ViewHairStyleScreen> {
               itemBuilder: (_,index){
                 return GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder:  (_) => 
-                    // EditHairCutScreen(docid: snapshot.data.docs[index])
+                    Navigator.push(context, MaterialPageRoute(builder:  (_) =>                     
                     ViewHairCutScreen(docid: snapshot.data!.docs[index]),
                     ));
                   },
@@ -127,8 +126,7 @@ class _ViewHairStyleScreen extends State<ViewHairStyleScreen> {
                           docs[index]['name'],
                           style: TextStyle(
                             fontSize: 20,
-                            color: Colors.white,
-                            // fontWeight: FontWeight.bold
+                            color: Colors.white,                            
                           ),
                           textAlign: TextAlign.left,
                         ),

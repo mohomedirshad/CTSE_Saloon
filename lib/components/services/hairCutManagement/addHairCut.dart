@@ -8,7 +8,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:salon_app/components/services/hairCutManagement/viewHairStyles.dart';
 import 'package:salon_app/dbContext/database.dart';
-// import 'package:path/path.dart' as path;
 
 
 class AddHairCutScreen extends StatefulWidget {
@@ -28,8 +27,6 @@ class _AddHairCutScreen extends State<AddHairCutScreen> {
   String fileName = '';
   final imagePicker = ImagePicker();
 
-  // FirebaseStorage storage = FirebaseStorage.instance;
-
   @override
   void initState() {
     super.initState();
@@ -41,9 +38,7 @@ class _AddHairCutScreen extends State<AddHairCutScreen> {
   TextEditingController haircutDescription = new TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
-    // final Storage storage = new Storage();
-
+  Widget build(BuildContext context) {    
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
