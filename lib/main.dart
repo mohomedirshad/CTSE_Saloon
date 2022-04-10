@@ -1,3 +1,4 @@
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,14 @@ class _MyAppState extends State<MyApp>{
       theme: ThemeData(        
         primaryColor: kPrimaryColor,
       ),
-      home: HomeScreen(),
+      // home: HomeScreen(),
+      home: AnimatedSplashScreen(
+        splash: Icons.cut,
+        nextScreen: HomeScreen(),
+        duration: 3000,
+        splashTransition: SplashTransition.fadeTransition,
+        backgroundColor: Colors.blue,
+      ),
     );
   }
 }

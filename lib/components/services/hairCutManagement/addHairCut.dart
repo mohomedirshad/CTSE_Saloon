@@ -144,6 +144,7 @@ class _AddHairCutScreen extends State<AddHairCutScreen> {
               child: TextField(
                 controller: haircutPrice,
                 decoration: InputDecoration(hintText: "Add Haircut Price..."),
+                keyboardType: TextInputType.number,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
